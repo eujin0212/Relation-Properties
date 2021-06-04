@@ -1,46 +1,152 @@
 package com.eujin;
 
-import java.util.ArrayList;
-import java.util.List;
+import javax.swing.*;
+import javax.swing.border.TitledBorder;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Scanner;
 
 public class Main {
+    public static Main main = new Main();
+    private JFrame mainFrame;
+    private JButton calculate, clear;
+    private JPanel inputPanel, btnPanel, outputPanel;
+    private JLabel label,label2, labelInt1, lableInt2 , labelReflexive, labelSymmeric, labelAsymmetic, labelAntisymmetric;
+    private TitledBorder inputBorder, btnBorder, outputBorder;
+    private JTextField xText, yText, reflexive, symmetric, asymmetric, antisymmetric;
+    private JScrollPane scrollPane;
+
+    public void showGUI() {
+        mainFrame = new JFrame("Relation Properties");
+        mainFrame.setSize(450,420);
+        mainFrame.setLayout(null);
+        mainFrame.setResizable(false);
+        mainFrame.setDefaultCloseOperation(3);
+
+        label = new JLabel("Welcome to Relation Properties",SwingConstants.CENTER);
+        label.setBounds(0,5,400,30);
+        label.setFont(label.getFont().deriveFont(13f));
+        label2 = new JLabel("This system will display the properties of a relation",SwingConstants.CENTER);
+        label2.setFont(label2.getFont().deriveFont(13f));
+        label2.setBounds(0,25,450,30);
+        labelInt1 = new JLabel("Set :");
+        labelInt1.setPreferredSize(new Dimension(60,25));
+        lableInt2 = new JLabel("Relation :");
+        lableInt2.setPreferredSize(new Dimension(60,25));
+        labelReflexive = new JLabel("Reflexive :");
+        labelReflexive.setPreferredSize(new Dimension(90,25));
+        labelSymmeric = new JLabel("Symmetric :");
+        labelSymmeric.setPreferredSize(new Dimension(90,25));
+        labelAsymmetic = new JLabel("Asymmetric :");
+        labelAsymmetic.setPreferredSize(new Dimension(90,25));
+        labelAntisymmetric = new JLabel("Antisymmetric :");
+        labelAntisymmetric.setPreferredSize(new Dimension(90,25));
+        xText = new JTextField();
+        xText.setPreferredSize(new Dimension(300,25));
+        xText.setHorizontalAlignment(JTextField.CENTER);
+        yText = new JTextField();
+        yText.setPreferredSize(new Dimension(300,25));
+        yText.setHorizontalAlignment(JTextField.CENTER);
+        reflexive = new JTextField();
+        reflexive.setPreferredSize(new Dimension(270,25));
+        reflexive.setHorizontalAlignment(JTextField.CENTER);
+        reflexive.setEditable(false);
+        symmetric = new JTextField();
+        symmetric.setPreferredSize(new Dimension(270,25));
+        symmetric.setHorizontalAlignment(JTextField.CENTER);
+        symmetric.setEditable(false);
+        asymmetric = new JTextField();
+        asymmetric.setPreferredSize(new Dimension(270,25));
+        asymmetric.setHorizontalAlignment(JTextField.CENTER);
+        asymmetric.setEditable(false);
+        antisymmetric = new JTextField();
+        antisymmetric.setPreferredSize(new Dimension(270,25));
+        antisymmetric.setHorizontalAlignment(JTextField.CENTER);
+        antisymmetric.setEditable(false);
+
+
+        calculate = new JButton("Show Properties");
+        calculate.setPreferredSize(new Dimension(200,25));
+        calculate.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String set, relation;
+                set = xText.getText();
+                relation = yText.getText();
+                String[] processedSet = set.split(",");
+                String replacedRelation = relation.replace(","," ");
+                String replacedRelation1 = replacedRelation.replace(")","");
+                String[] processedRelation = replacedRelation1.split("\\(");
+                reflexive.setText(Reflexive(processedSet,processedRelation));
+                symmetric.setText(Symmetric(processedRelation));
+                asymmetric.setText(Asymmetric(processedSet,processedRelation));
+                antisymmetric.setText(Antisymmetric(processedSet,processedRelation));
+            }
+        });
+
+        clear = new JButton("Clear");
+        clear.setPreferredSize(new Dimension(200,25));
+        clear.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                xText.setText("");
+                yText.setText("");
+                reflexive.setText("");
+                symmetric.setText("");
+                asymmetric.setText("");
+                antisymmetric.setText("");
+            }
+        });
+
+        inputBorder = new TitledBorder("User Input");
+        inputPanel = new JPanel();
+        inputPanel.setBounds(10,50,420,90);
+        inputPanel.setBorder(inputBorder);
+        inputPanel.add(labelInt1);
+        inputPanel.add(xText);
+        inputPanel.add(lableInt2);
+        inputPanel.add(yText);
+
+        btnBorder = new TitledBorder("Choose Action");
+        btnPanel = new JPanel();
+        btnPanel.setBounds(10,140,420,60);
+        btnPanel.setBorder(btnBorder);
+        btnPanel.add(calculate);
+        btnPanel.add(clear);
+        btnPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        outputBorder = new TitledBorder("Properties of Relation");
+        outputPanel = new JPanel();
+        outputPanel.setBounds(10,200,420,150);
+        outputPanel.setBorder(outputBorder);
+        outputPanel.add(labelReflexive);
+        outputPanel.add(reflexive);
+        outputPanel.add(labelSymmeric);
+        outputPanel.add(symmetric);
+        outputPanel.add(labelAsymmetic);
+        outputPanel.add(asymmetric);
+        outputPanel.add(labelAntisymmetric);
+        outputPanel.add(antisymmetric);
+        outputPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+
+
+        mainFrame.add(label);
+        mainFrame.add(label2);
+        mainFrame.add(inputPanel);
+        mainFrame.add(btnPanel);
+        mainFrame.add(outputPanel);
+        mainFrame.setVisible(true);
+    }
 
     public static void main(String[] args) {
 	// write your code here
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Input set: ");
-        String set = scanner.next();
-        System.out.print("Input relation: ");
-        String relation = scanner.next();
-//        String set = "1,2,3,4";
-        String[] processedSet = set.split(",");
-//        String relation = "(1,2),(1,3),(2,2),(2,4)";
-//        String relation = "(1,1),(1,4),(2,2),(3,3),(4,4)";
-//        String relation = "(1,2),(1,3),(2,1),(3,1)";
-//        String relation = "(1,2),(2,2),(2,1)";
-//        String relation = "(1,1),(2,2),(3,3),(3,1)";
-        String replacedRelation = relation.replace(","," ");
-        String replacedRelation1 = replacedRelation.replace(")","");
-        String[] processedRelation = replacedRelation1.split("\\(");
-        List<String> finalProcessedList = new ArrayList<String>();
-        for(int i =0;i<processedRelation.length;i++){
-            if(!processedRelation[i].isEmpty()){
-                String[] splitRelation = processedRelation[i].split(" ");
-                for(int j=0;j<splitRelation.length;j++){
-                    finalProcessedList.add(splitRelation[j]);
-                }
-            }
-        }
-
-        Reflexive(processedSet,processedRelation);
-        Symmetric(processedRelation);
-        Asymmetric(processedSet,processedRelation);
-        Antisymmetric(processedSet,processedRelation);
+        main.showGUI();
 
     }
 
-    public static void Reflexive (String[] set, String[] relation){
+    public static String Reflexive (String[] set, String[] relation){
         int correct = 0;
         for(int i=0;i<set.length;i++){
             for(int j =0;j<relation.length;j++){
@@ -54,13 +160,13 @@ public class Main {
             }
         }
         if(set.length == correct){
-            System.out.println("The relation is reflexive");
+            return "IS REFLEXISE";
         }else {
-            System.out.println("The relation is not reflexive");
+            return "IS NOT REFLEXISE";
         }
     }
 
-    public static void Symmetric (String[] relation){
+    public static String Symmetric (String[] relation){
         int correct = 0;
         for(int i=0;i<relation.length;i++){
             if(!relation[i].isEmpty()){
@@ -76,13 +182,13 @@ public class Main {
             }
         }
         if(relation.length-1 == correct){
-            System.out.println("The relation is symmetric");
+            return "IS SYMMETRIC";
         }else {
-            System.out.println("The relation is not symmetric");
+            return "IS NOT SYMMETRIC";
         }
     }
 
-    public static void Asymmetric (String[] set, String[] relation){
+    public static String Asymmetric (String[] set, String[] relation){
         boolean checkDiagonal = false;
         for(int i=0;i<set.length;i++){
             for(int j =0;j<relation.length;j++){
@@ -112,15 +218,15 @@ public class Main {
             }
         }
         if(correct == 0){
-            System.out.println("The relation is not asymmetric");
+            return "IS NOT ASYMMETRIC";
         }else if(relation.length-1 == correct) {
-            System.out.println("The relation is not asymmetric");
+            return "IS NOT ASYMMETRIC";
         }else {
-            System.out.println("The relation is asymmetric");
+            return "IS ASYMMETRIC";
         }
     }
 
-    public static void Antisymmetric (String[] set ,String[] relation){
+    public static String Antisymmetric (String[] set ,String[] relation){
         boolean checkDiagonal = false;
         for(int i=0;i<set.length;i++){
             for(int j =0;j<relation.length;j++){
@@ -150,11 +256,11 @@ public class Main {
             }
         }
         if(correct==0){
-            System.out.println("The relation is not antiasymmetric");
+            return "IS NOT ANTISYMMETRIC";
         }else if(relation.length-1 == correct){
-            System.out.println("The relation is not antiasymmetric");
+            return "IS NOT ANTISYMMETRIC";
         }else {
-            System.out.println("The relation is antisymmetric");
+            return "IS ANTISYMMETRIC";
         }
     }
 }
