@@ -160,9 +160,9 @@ public class Main {
             }
         }
         if(set.length == correct){
-            return "IS REFLEXISE";
+            return "IS REFLEXIVE";
         }else {
-            return "IS NOT REFLEXISE";
+            return "IS NOT REFLEXIVE";
         }
     }
 
