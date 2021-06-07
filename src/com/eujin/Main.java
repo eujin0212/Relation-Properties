@@ -217,12 +217,10 @@ public class Main {
                 }
             }
         }
-        if(correct == 0){
-            return "IS NOT ASYMMETRIC";
-        }else if(relation.length-1 == correct) {
-            return "IS NOT ASYMMETRIC";
-        }else {
+        if(!checkDiagonal && correct == 0){
             return "IS ASYMMETRIC";
+        }else {
+            return "IS NOT ASYMMETRIC";
         }
     }
 
